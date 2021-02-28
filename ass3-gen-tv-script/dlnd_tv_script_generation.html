@@ -13359,7 +13359,7 @@ george: yes, it was purple, i liked it, i dont actually recall considering the b
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">token_lookup</span><span class="p">():</span>
@@ -13369,7 +13369,18 @@ george: yes, it was purple, i liked it, i dont actually recall considering the b
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO: Implement Function</span>
         
-    <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;.&#39;</span>  <span class="p">:</span> <span class="s1">&#39;||period||&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;,&#39;</span>  <span class="p">:</span> <span class="s1">&#39;||comma||&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;&quot;&#39;</span>  <span class="p">:</span> <span class="s1">&#39;||quotationmark||&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;;&#39;</span>  <span class="p">:</span> <span class="s1">&#39;||semicolon||&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;!&#39;</span>  <span class="p">:</span> <span class="s1">&#39;||exclamationmark||&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;?&#39;</span>  <span class="p">:</span> <span class="s1">&#39;||questionmark||&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;(&#39;</span>  <span class="p">:</span> <span class="s1">&#39;||leftparentheses&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;)&#39;</span>  <span class="p">:</span> <span class="s1">&#39;||rightparentheses&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;-&#39;</span> <span class="p">:</span> <span class="s1">&#39;||doubledash||&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="p">:</span> <span class="s1">&#39;||return||&#39;</span>
+    <span class="p">}</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">DON&#39;T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE</span>
@@ -13378,6 +13389,24 @@ george: yes, it was purple, i liked it, i dont actually recall considering the b
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Tests Passed
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
