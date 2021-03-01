@@ -13446,7 +13446,7 @@ george: yes, it was purple, i liked it, i dont actually recall considering the b
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -13474,7 +13474,7 @@ george: yes, it was purple, i liked it, i dont actually recall considering the b
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -13525,7 +13525,7 @@ sequence_length = 4</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="k">import</span> <span class="n">TensorDataset</span><span class="p">,</span> <span class="n">DataLoader</span>
@@ -13606,7 +13606,7 @@ tensor([ 33,  26,  22,  39,  16,  28,  11,  43,  30,  12])</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># test dataloader</span>
@@ -13639,19 +13639,19 @@ tensor([ 33,  26,  22,  39,  16,  28,  11,  43,  30,  12])</code></pre>
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>torch.Size([10, 5])
-tensor([[  8,   9,  10,  11,  12],
-        [ 23,  24,  25,  26,  27],
+tensor([[ 35,  36,  37,  38,  39],
         [ 36,  37,  38,  39,  40],
-        [ 38,  39,  40,  41,  42],
-        [ 24,  25,  26,  27,  28],
-        [ 30,  31,  32,  33,  34],
-        [ 40,  41,  42,  43,  44],
-        [ 32,  33,  34,  35,  36],
-        [  2,   3,   4,   5,   6],
-        [  6,   7,   8,   9,  10]])
+        [ 25,  26,  27,  28,  29],
+        [  7,   8,   9,  10,  11],
+        [  6,   7,   8,   9,  10],
+        [ 23,  24,  25,  26,  27],
+        [  8,   9,  10,  11,  12],
+        [ 26,  27,  28,  29,  30],
+        [  9,  10,  11,  12,  13],
+        [  4,   5,   6,   7,   8]])
 
 torch.Size([10])
-tensor([ 13,  28,  41,  43,  29,  35,  45,  37,   7,  11])
+tensor([ 40,  41,  30,  12,  11,  28,  13,  31,  14,   9])
 </pre>
 </div>
 </div>
@@ -13687,7 +13687,7 @@ out = output[:, -1]</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
@@ -13825,7 +13825,7 @@ out = output[:, -1]</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">forward_back_prop</span><span class="p">(</span><span class="n">rnn</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">inp</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">hidden</span><span class="p">):</span>
@@ -13856,7 +13856,7 @@ out = output[:, -1]</code></pre>
     <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">hidden</span><span class="p">)</span>
 
     <span class="c1"># perform backpropagation and optimization</span>
-    <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="n">target</span><span class="o">.</span><span class="n">long</span><span class="p">())</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
     <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
     
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
@@ -13906,7 +13906,7 @@ out = output[:, -1]</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -14016,14 +14016,14 @@ out = output[:, -1]</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Training parameters</span>
 <span class="c1"># Number of Epochs</span>
 <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="c1"># Learning Rate</span>
-<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.001</span>
 
 <span class="c1"># Model parameters</span>
 <span class="c1"># Vocab size</span>
@@ -14059,7 +14059,7 @@ out = output[:, -1]</code></pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -14098,265 +14098,265 @@ out = output[:, -1]</code></pre>
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Training for 10 epoch(s)...
-Epoch:    1/10    Loss: 5.484442700386047
+Epoch:    1/10    Loss: 5.590324193000794
 
-Epoch:    1/10    Loss: 4.94616553068161
+Epoch:    1/10    Loss: 4.888253290653228
 
-Epoch:    1/10    Loss: 4.9028790278434755
+Epoch:    1/10    Loss: 4.684286934375763
 
-Epoch:    1/10    Loss: 4.819709769725799
+Epoch:    1/10    Loss: 4.527244926929474
 
-Epoch:    1/10    Loss: 4.787789381504059
+Epoch:    1/10    Loss: 4.470432235240937
 
-Epoch:    1/10    Loss: 4.752190566062927
+Epoch:    1/10    Loss: 4.37277314567566
 
-Epoch:    1/10    Loss: 4.714583544254303
+Epoch:    1/10    Loss: 4.351095580577851
 
-Epoch:    1/10    Loss: 4.674748455047608
+Epoch:    1/10    Loss: 4.288746295928955
 
-Epoch:    1/10    Loss: 4.66181800031662
+Epoch:    1/10    Loss: 4.274689783573151
 
-Epoch:    1/10    Loss: 4.595869928359986
+Epoch:    1/10    Loss: 4.242334582328796
 
-Epoch:    1/10    Loss: 4.584621056556702
+Epoch:    1/10    Loss: 4.214433350563049
 
-Epoch:    1/10    Loss: 4.598549399852753
+Epoch:    1/10    Loss: 4.191484130859375
 
-Epoch:    1/10    Loss: 4.56145313501358
+Epoch:    1/10    Loss: 4.198749661445618
 
-Epoch:    2/10    Loss: 4.479688368591607
+Epoch:    2/10    Loss: 4.075933104083019
 
-Epoch:    2/10    Loss: 4.416801022529602
+Epoch:    2/10    Loss: 3.979821995258331
 
-Epoch:    2/10    Loss: 4.425527559280395
+Epoch:    2/10    Loss: 3.9782530455589296
 
-Epoch:    2/10    Loss: 4.378291517257691
+Epoch:    2/10    Loss: 3.9641981501579284
 
-Epoch:    2/10    Loss: 4.381832684993744
+Epoch:    2/10    Loss: 3.9300786175727844
 
-Epoch:    2/10    Loss: 4.400658076763153
+Epoch:    2/10    Loss: 3.95413046503067
 
-Epoch:    2/10    Loss: 4.385889803886413
+Epoch:    2/10    Loss: 3.944321537017822
 
-Epoch:    2/10    Loss: 4.368536541938782
+Epoch:    2/10    Loss: 3.9108206763267517
 
-Epoch:    2/10    Loss: 4.377373872756958
+Epoch:    2/10    Loss: 3.92259733581543
 
-Epoch:    2/10    Loss: 4.367260893344879
+Epoch:    2/10    Loss: 3.9305511083602904
 
-Epoch:    2/10    Loss: 4.372175960540772
+Epoch:    2/10    Loss: 3.912530993938446
 
-Epoch:    2/10    Loss: 4.398414199352264
+Epoch:    2/10    Loss: 3.9269866986274717
 
-Epoch:    2/10    Loss: 4.379969002246857
+Epoch:    2/10    Loss: 3.9212574014663697
 
-Epoch:    3/10    Loss: 4.344797032536368
+Epoch:    3/10    Loss: 3.802757470846422
 
-Epoch:    3/10    Loss: 4.265287412166596
+Epoch:    3/10    Loss: 3.72803421831131
 
-Epoch:    3/10    Loss: 4.287136034965515
+Epoch:    3/10    Loss: 3.7427052841186526
 
-Epoch:    3/10    Loss: 4.284970019817353
+Epoch:    3/10    Loss: 3.723951612472534
 
-Epoch:    3/10    Loss: 4.279912236690521
+Epoch:    3/10    Loss: 3.763813406467438
 
-Epoch:    3/10    Loss: 4.316088407993317
+Epoch:    3/10    Loss: 3.739964465141296
 
-Epoch:    3/10    Loss: 4.277244734764099
+Epoch:    3/10    Loss: 3.7466393790245056
 
-Epoch:    3/10    Loss: 4.305865746498108
+Epoch:    3/10    Loss: 3.741105140209198
 
-Epoch:    3/10    Loss: 4.281154645442963
+Epoch:    3/10    Loss: 3.7669056873321534
 
-Epoch:    3/10    Loss: 4.298446642875671
+Epoch:    3/10    Loss: 3.7496809496879577
 
-Epoch:    3/10    Loss: 4.2877420196533205
+Epoch:    3/10    Loss: 3.7639638619422913
 
-Epoch:    3/10    Loss: 4.34364367723465
+Epoch:    3/10    Loss: 3.755276891231537
 
-Epoch:    3/10    Loss: 4.306225656509399
+Epoch:    3/10    Loss: 3.7648139128684996
 
-Epoch:    4/10    Loss: 4.278538900263169
+Epoch:    4/10    Loss: 3.6699729504600027
 
-Epoch:    4/10    Loss: 4.230193663597107
+Epoch:    4/10    Loss: 3.6048401532173155
 
-Epoch:    4/10    Loss: 4.227557168006897
+Epoch:    4/10    Loss: 3.6066463046073913
 
-Epoch:    4/10    Loss: 4.241670826435089
+Epoch:    4/10    Loss: 3.5979392671585084
 
-Epoch:    4/10    Loss: 4.243438335895538
+Epoch:    4/10    Loss: 3.6203462438583376
 
-Epoch:    4/10    Loss: 4.259314302444458
+Epoch:    4/10    Loss: 3.6241613187789916
 
-Epoch:    4/10    Loss: 4.2744620156288144
+Epoch:    4/10    Loss: 3.6318819694519044
 
-Epoch:    4/10    Loss: 4.2870445098876955
+Epoch:    4/10    Loss: 3.6432661299705504
 
-Epoch:    4/10    Loss: 4.2414279894828795
+Epoch:    4/10    Loss: 3.6178123030662537
 
-Epoch:    4/10    Loss: 4.280848661899567
+Epoch:    4/10    Loss: 3.6293215017318725
 
-Epoch:    4/10    Loss: 4.2564975547790525
+Epoch:    4/10    Loss: 3.616885678291321
 
-Epoch:    4/10    Loss: 4.275848394870758
+Epoch:    4/10    Loss: 3.642921468734741
 
-Epoch:    4/10    Loss: 4.303310898303986
+Epoch:    4/10    Loss: 3.6607932415008544
 
-Epoch:    5/10    Loss: 4.237355120779929
+Epoch:    5/10    Loss: 3.573599803312398
 
-Epoch:    5/10    Loss: 4.216610152721405
+Epoch:    5/10    Loss: 3.4993353853225706
 
-Epoch:    5/10    Loss: 4.196539771556854
+Epoch:    5/10    Loss: 3.494387029647827
 
-Epoch:    5/10    Loss: 4.212191526412964
+Epoch:    5/10    Loss: 3.4921929197311403
 
-Epoch:    5/10    Loss: 4.2217500066757205
+Epoch:    5/10    Loss: 3.505969461917877
 
-Epoch:    5/10    Loss: 4.23014006614685
+Epoch:    5/10    Loss: 3.5440576853752135
 
-Epoch:    5/10    Loss: 4.215467356681824
+Epoch:    5/10    Loss: 3.529219048500061
 
-Epoch:    5/10    Loss: 4.269030789852143
+Epoch:    5/10    Loss: 3.5482746834754946
 
-Epoch:    5/10    Loss: 4.262051766872406
+Epoch:    5/10    Loss: 3.530603026866913
 
-Epoch:    5/10    Loss: 4.272028299331665
+Epoch:    5/10    Loss: 3.5403468747138978
 
-Epoch:    5/10    Loss: 4.271284575939179
+Epoch:    5/10    Loss: 3.5419323263168336
 
-Epoch:    5/10    Loss: 4.263886338710785
+Epoch:    5/10    Loss: 3.562652982711792
 
-Epoch:    5/10    Loss: 4.29605546951294
+Epoch:    5/10    Loss: 3.578720757007599
 
-Epoch:    6/10    Loss: 4.220500509559309
+Epoch:    6/10    Loss: 3.482553507152357
 
-Epoch:    6/10    Loss: 4.209687415599823
+Epoch:    6/10    Loss: 3.4149962282180786
 
-Epoch:    6/10    Loss: 4.187979933261872
+Epoch:    6/10    Loss: 3.421860308647156
 
-Epoch:    6/10    Loss: 4.215558164596557
+Epoch:    6/10    Loss: 3.427788640022278
 
-Epoch:    6/10    Loss: 4.211831017971039
+Epoch:    6/10    Loss: 3.44053212928772
 
-Epoch:    6/10    Loss: 4.236889162063599
+Epoch:    6/10    Loss: 3.4441291904449463
 
-Epoch:    6/10    Loss: 4.205122083187104
+Epoch:    6/10    Loss: 3.4490546827316284
 
-Epoch:    6/10    Loss: 4.25802685880661
+Epoch:    6/10    Loss: 3.4608644437789917
 
-Epoch:    6/10    Loss: 4.244955252170563
+Epoch:    6/10    Loss: 3.450526967048645
 
-Epoch:    6/10    Loss: 4.255879021644592
+Epoch:    6/10    Loss: 3.475965853691101
 
-Epoch:    6/10    Loss: 4.281872911453247
+Epoch:    6/10    Loss: 3.486741042137146
 
-Epoch:    6/10    Loss: 4.2665925188064575
+Epoch:    6/10    Loss: 3.4876449670791625
 
-Epoch:    6/10    Loss: 4.278951924324035
+Epoch:    6/10    Loss: 3.503056986808777
 
-Epoch:    7/10    Loss: 4.221892517294554
+Epoch:    7/10    Loss: 3.4134832835910984
 
-Epoch:    7/10    Loss: 4.199634388446808
+Epoch:    7/10    Loss: 3.360688500881195
 
-Epoch:    7/10    Loss: 4.206309230804443
+Epoch:    7/10    Loss: 3.349437800884247
 
-Epoch:    7/10    Loss: 4.21641174697876
+Epoch:    7/10    Loss: 3.3702019209861755
 
-Epoch:    7/10    Loss: 4.19889296913147
+Epoch:    7/10    Loss: 3.3599567070007326
 
-Epoch:    7/10    Loss: 4.239632034301758
+Epoch:    7/10    Loss: 3.353622838497162
 
-Epoch:    7/10    Loss: 4.2179223098754886
+Epoch:    7/10    Loss: 3.3865050005912782
 
-Epoch:    7/10    Loss: 4.237407570362091
+Epoch:    7/10    Loss: 3.39067728471756
 
-Epoch:    7/10    Loss: 4.232689528465271
+Epoch:    7/10    Loss: 3.405487913608551
 
-Epoch:    7/10    Loss: 4.243504361629486
+Epoch:    7/10    Loss: 3.430709520339966
 
-Epoch:    7/10    Loss: 4.260017770290375
+Epoch:    7/10    Loss: 3.426865990161896
 
-Epoch:    7/10    Loss: 4.257068149089813
+Epoch:    7/10    Loss: 3.4408698921203613
 
-Epoch:    7/10    Loss: 4.285210967540741
+Epoch:    7/10    Loss: 3.4306359357833864
 
-Epoch:    8/10    Loss: 4.236042124322078
+Epoch:    8/10    Loss: 3.3729807102766323
 
-Epoch:    8/10    Loss: 4.199390449047089
+Epoch:    8/10    Loss: 3.29579217004776
 
-Epoch:    8/10    Loss: 4.182436559677124
+Epoch:    8/10    Loss: 3.30475358915329
 
-Epoch:    8/10    Loss: 4.208336556434632
+Epoch:    8/10    Loss: 3.287398869037628
 
-Epoch:    8/10    Loss: 4.180736435413361
+Epoch:    8/10    Loss: 3.30803413438797
 
-Epoch:    8/10    Loss: 4.251938024520874
+Epoch:    8/10    Loss: 3.3346384863853453
 
-Epoch:    8/10    Loss: 4.260221673488617
+Epoch:    8/10    Loss: 3.34546674489975
 
-Epoch:    8/10    Loss: 4.22019746875763
+Epoch:    8/10    Loss: 3.3580472626686095
 
-Epoch:    8/10    Loss: 4.250251508712768
+Epoch:    8/10    Loss: 3.351181411743164
 
-Epoch:    8/10    Loss: 4.235734687805175
+Epoch:    8/10    Loss: 3.372713991165161
 
-Epoch:    8/10    Loss: 4.2408338718414305
+Epoch:    8/10    Loss: 3.39933304977417
 
-Epoch:    8/10    Loss: 4.254416984558105
+Epoch:    8/10    Loss: 3.3851739468574524
 
-Epoch:    8/10    Loss: 4.28361545085907
+Epoch:    8/10    Loss: 3.365904118061066
 
-Epoch:    9/10    Loss: 4.225641199186737
+Epoch:    9/10    Loss: 3.3287152468973638
 
-Epoch:    9/10    Loss: 4.176130964279174
+Epoch:    9/10    Loss: 3.239799982070923
 
-Epoch:    9/10    Loss: 4.1875725927352905
+Epoch:    9/10    Loss: 3.275121765136719
 
-Epoch:    9/10    Loss: 4.199062146663666
+Epoch:    9/10    Loss: 3.2661000370979307
 
-Epoch:    9/10    Loss: 4.192047716140747
+Epoch:    9/10    Loss: 3.2671183061599733
 
-Epoch:    9/10    Loss: 4.215351360321045
+Epoch:    9/10    Loss: 3.3011056923866273
 
-Epoch:    9/10    Loss: 4.228150099277497
+Epoch:    9/10    Loss: 3.2946381583213804
 
-Epoch:    9/10    Loss: 4.229804358959198
+Epoch:    9/10    Loss: 3.288654477119446
 
-Epoch:    9/10    Loss: 4.2413943152427676
+Epoch:    9/10    Loss: 3.300804591178894
 
-Epoch:    9/10    Loss: 4.220530524730682
+Epoch:    9/10    Loss: 3.3306534056663515
 
-Epoch:    9/10    Loss: 4.26478400182724
+Epoch:    9/10    Loss: 3.3339035224914553
 
-Epoch:    9/10    Loss: 4.2663120470047
+Epoch:    9/10    Loss: 3.3388302373886107
 
-Epoch:    9/10    Loss: 4.261663199424744
+Epoch:    9/10    Loss: 3.35979239654541
 
-Epoch:   10/10    Loss: 4.230648454866912
+Epoch:   10/10    Loss: 3.269505914150746
 
-Epoch:   10/10    Loss: 4.145478252887726
+Epoch:   10/10    Loss: 3.2123773460388185
 
-Epoch:   10/10    Loss: 4.191527612686158
+Epoch:   10/10    Loss: 3.217906943798065
 
-Epoch:   10/10    Loss: 4.167433201313019
+Epoch:   10/10    Loss: 3.219022843360901
 
-Epoch:   10/10    Loss: 4.202611916065216
+Epoch:   10/10    Loss: 3.24151975774765
 
-Epoch:   10/10    Loss: 4.218446872711182
+Epoch:   10/10    Loss: 3.24447952747345
 
-Epoch:   10/10    Loss: 4.22286700296402
+Epoch:   10/10    Loss: 3.253287437915802
 
-Epoch:   10/10    Loss: 4.243833124637604
+Epoch:   10/10    Loss: 3.255584930419922
 
-Epoch:   10/10    Loss: 4.240899808883667
+Epoch:   10/10    Loss: 3.2756655550003053
 
-Epoch:   10/10    Loss: 4.229610294342041
+Epoch:   10/10    Loss: 3.2761274724006655
 
-Epoch:   10/10    Loss: 4.243199006080627
+Epoch:   10/10    Loss: 3.288809057712555
 
-Epoch:   10/10    Loss: 4.267184983253479
+Epoch:   10/10    Loss: 3.3065098104476927
 
-Epoch:   10/10    Loss: 4.265431617736817
+Epoch:   10/10    Loss: 3.32642098903656
 
 </pre>
 </div>
@@ -14400,7 +14400,12 @@ Epoch:   10/10    Loss: 4.265431617736817
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer:</strong> (Write answer, here)</p>
+<p><strong>Answer:</strong> (Write answer, here)
+I did not make any changes to hidden_dim (@300) or layers(2). 
+I initially had the output size as the size of the vocab as I assumed, we were generating a new script of the same size. I was getting memory errors with this output size. Going through forums I realised the output is just meant to be the size of number of unique words. This also resolved my memory errors.
+I ran 10 epochs on 2 different ocassions but found that my loss was settling somewhere around 4.2. This should've been my first clue to tinker with my learning rate which at the time was 0.01.
+From a mentor I got a recommendation to reduce the learning rate. This made sense as it seemed like a symptom of a high learning rate which meant the loss was bouncing around without settling on the minima.
+Once I changed my learning rate to 0.001, I got my desired loss.</p>
 
 </div>
 </div>
@@ -14416,7 +14421,7 @@ Epoch:   10/10    Loss: 4.265431617736817
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -14446,7 +14451,7 @@ Epoch:   10/10    Loss: 4.265431617736817
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -14541,7 +14546,7 @@ Epoch:   10/10    Loss: 4.265431617736817
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># run the cell multiple times to get different results!</span>
@@ -14581,73 +14586,59 @@ Epoch:   10/10    Loss: 4.265431617736817
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>jerry:?
+<pre>jerry: dealer with her.
 
-kramer: yeah!!
+elaine:(to kramer) hey, what are you doing?
 
-jerry: yeah.
+george:(pointing at the same face) i can&#39;t believe that.
 
-jerry: yeah, i was... i don&#39;t have to get it?
+george: what?
 
-jerry: i was. you know how much!
+jerry: you know. i think it would have been on a date. you know, i was just curious..
 
-kramer:(to elaine)
+jerry: well, i guess i could do something. you know what? i don&#39;t know how you think of that.
 
-jerry: you know, the whole, and i don&#39;t want to the time.
+jerry: i thought he was in a long time.
 
-jerry:(getting a hand)
+jerry: oh, yeah.
 
-jerry: yeah, i was, and i don&#39;t know what?
+elaine: oh, yeah?
 
-elaine: i don&#39;t know. i was, i was.
+george: yeah, well, i&#39;m gonna go to the bathroom.
 
-george: i can&#39;t do with it.
+george: what?
 
-jerry: you know, i don&#39;t want to be, and, i don&#39;t want to the way! you want to be, i don&#39;t know what i can&#39;t have a way, it&#39;s a little good.
+elaine: well, i was in the middle of the aisle.
 
-jerry: yeah.
+george:(to george) you know what? you&#39;re just gonna have a job interview. i don&#39;t know if you were in the mood with the other person.
 
-jerry:(to jerry)
+elaine: oh, you don&#39;t have any ideas.
 
-kramer:(to kramer) i think i can&#39;t be, it&#39;s a little.
+george: well, i think you should have taken a big deal.
 
-jerry: you know what i think you know what i don&#39;t know.
+kramer: well i think i could have a little problem about it.
 
-jerry:(to jerry)
+elaine: well, i think you should get a little problem...(he grabs the door.)
 
-george: well, i don&#39;t know what you know, i just be, it&#39;s not sorry?
+elaine: oh, i think i should get out of this.
 
-jerry: you want to me to me.
+elaine: what do you mean?
 
-elaine: well what happened? you know, i can&#39;t do with me.
+kramer: i think i can...(george shakes the door)
 
-jerry: yeah, i don&#39;t know, i don&#39;t want to get the time.
+george:(to the phone) well, i just don&#39;t see what happened. i don&#39;t have anything.
 
-kramer: you want to the little?
+george:(to george) well, i&#39;m sure i can do something to say, but i don&#39;t know why you want to get away with it?
 
-george: well, i was, i can&#39;t be a little.
+george: i know, but i know.
 
-jerry: well, i think we know.
+george: well, i think i should be in a mood like you....
 
-jerry: well, i can&#39;t get it?(he)
+jerry: what do you think of the request?
 
-jerry: well, you know, it&#39;s gonna get a whole----
+kramer: i don&#39;t think so.
 
-kramer: i was the little.
-
-jerry: yeah!
-
-kramer: i can&#39;t be...
-
-elaine: well i don&#39;t understand.
-
-jerry: well, you think i&#39;m a little good...
-
-jerry:(still)
-
-jerry:(still) hey, i&#39;m not going out of a little good----.
-
-jerry:
+kramer: oh, well, i don&#39;t know, but the thing is, you
 </pre>
 </div>
 </div>
@@ -14666,7 +14657,7 @@ jerry:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># save script to a text file</span>
