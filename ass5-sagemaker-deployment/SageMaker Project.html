@@ -15078,13 +15078,32 @@ Billable seconds: 265
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">estimator</span><span class="o">.</span><span class="n">delete_endpoint</span><span class="p">()</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>The function delete_endpoint is a no-op in sagemaker&gt;=2.
+See: https://sagemaker.readthedocs.io/en/stable/v2.html for details.
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -15110,13 +15129,122 @@ Billable seconds: 265
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>pygmentize serve/predict.py
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre><span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">argparse</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">json</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">os</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">pickle</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">sys</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">sagemaker_containers</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">pandas</span> <span class="ansi-blue-fg">as</span> <span class="ansi-cyan-fg ansi-underline">pd</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">numpy</span> <span class="ansi-blue-fg">as</span> <span class="ansi-cyan-fg ansi-underline">np</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">torch</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">torch</span><span class="ansi-cyan-fg ansi-underline">.</span><span class="ansi-cyan-fg ansi-underline">nn</span> <span class="ansi-blue-fg">as</span> <span class="ansi-cyan-fg ansi-underline">nn</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">torch</span><span class="ansi-cyan-fg ansi-underline">.</span><span class="ansi-cyan-fg ansi-underline">optim</span> <span class="ansi-blue-fg">as</span> <span class="ansi-cyan-fg ansi-underline">optim</span>
+<span class="ansi-blue-fg">import</span> <span class="ansi-cyan-fg ansi-underline">torch</span><span class="ansi-cyan-fg ansi-underline">.</span><span class="ansi-cyan-fg ansi-underline">utils</span><span class="ansi-cyan-fg ansi-underline">.</span><span class="ansi-cyan-fg ansi-underline">data</span>
+
+<span class="ansi-blue-fg">from</span> <span class="ansi-cyan-fg ansi-underline">model</span> <span class="ansi-blue-fg">import</span> LSTMClassifier
+
+<span class="ansi-blue-fg">from</span> <span class="ansi-cyan-fg ansi-underline">utils</span> <span class="ansi-blue-fg">import</span> review_to_words, convert_and_pad
+
+<span class="ansi-blue-fg">def</span> <span class="ansi-green-fg">model_fn</span>(model_dir):
+    <span class="ansi-yellow-fg">&#34;&#34;&#34;Load the PyTorch model from the `model_dir` directory.&#34;&#34;&#34;</span>
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">Loading model.</span><span class="ansi-yellow-fg">&#34;</span>)
+
+    <span class="ansi-white-fg"># First, load the parameters used to create the model.</span>
+    model_info = {}
+    model_info_path = os.path.join(model_dir, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">model_info.pth</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">with</span> <span class="ansi-cyan-fg">open</span>(model_info_path, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">rb</span><span class="ansi-yellow-fg">&#39;</span>) <span class="ansi-blue-fg">as</span> f:
+        model_info = torch.load(f)
+
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">model_info: </span><span class="ansi-yellow-fg">{}</span><span class="ansi-yellow-fg">&#34;</span>.format(model_info))
+
+    <span class="ansi-white-fg"># Determine the device and construct the model.</span>
+    device = torch.device(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">cuda</span><span class="ansi-yellow-fg">&#34;</span> <span class="ansi-blue-fg">if</span> torch.cuda.is_available() <span class="ansi-blue-fg">else</span> <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">cpu</span><span class="ansi-yellow-fg">&#34;</span>)
+    model = LSTMClassifier(model_info[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">embedding_dim</span><span class="ansi-yellow-fg">&#39;</span>], model_info[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">hidden_dim</span><span class="ansi-yellow-fg">&#39;</span>], model_info[<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">vocab_size</span><span class="ansi-yellow-fg">&#39;</span>])
+
+    <span class="ansi-white-fg"># Load the store model parameters.</span>
+    model_path = os.path.join(model_dir, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">model.pth</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">with</span> <span class="ansi-cyan-fg">open</span>(model_path, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">rb</span><span class="ansi-yellow-fg">&#39;</span>) <span class="ansi-blue-fg">as</span> f:
+        model.load_state_dict(torch.load(f))
+
+    <span class="ansi-white-fg"># Load the saved word_dict.</span>
+    word_dict_path = os.path.join(model_dir, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">word_dict.pkl</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">with</span> <span class="ansi-cyan-fg">open</span>(word_dict_path, <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">rb</span><span class="ansi-yellow-fg">&#39;</span>) <span class="ansi-blue-fg">as</span> f:
+        model.word_dict = pickle.load(f)
+
+    model.to(device).eval()
+
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">Done loading model.</span><span class="ansi-yellow-fg">&#34;</span>)
+    <span class="ansi-blue-fg">return</span> model
+
+<span class="ansi-blue-fg">def</span> <span class="ansi-green-fg">input_fn</span>(serialized_input_data, content_type):
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">Deserializing the input data.</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">if</span> content_type == <span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">text/plain</span><span class="ansi-yellow-fg">&#39;</span>:
+        data = serialized_input_data.decode(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">utf-8</span><span class="ansi-yellow-fg">&#39;</span>)
+        <span class="ansi-blue-fg">return</span> data
+    <span class="ansi-blue-fg">raise</span> <span class="ansi-cyan-fg">Exception</span>(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">Requested unsupported ContentType in content_type: </span><span class="ansi-yellow-fg">&#39;</span> + content_type)
+
+<span class="ansi-blue-fg">def</span> <span class="ansi-green-fg">output_fn</span>(prediction_output, accept):
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">Serializing the generated output.</span><span class="ansi-yellow-fg">&#39;</span>)
+    <span class="ansi-blue-fg">return</span> <span class="ansi-cyan-fg">str</span>(prediction_output)
+
+<span class="ansi-blue-fg">def</span> <span class="ansi-green-fg">predict_fn</span>(input_data, model):
+    <span class="ansi-cyan-fg">print</span>(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">Inferring sentiment of input data.</span><span class="ansi-yellow-fg">&#39;</span>)
+
+    device = torch.device(<span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">cuda</span><span class="ansi-yellow-fg">&#34;</span> <span class="ansi-blue-fg">if</span> torch.cuda.is_available() <span class="ansi-blue-fg">else</span> <span class="ansi-yellow-fg">&#34;</span><span class="ansi-yellow-fg">cpu</span><span class="ansi-yellow-fg">&#34;</span>)
+    
+    <span class="ansi-blue-fg">if</span> model.word_dict <span class="ansi-magenta-fg">is</span> <span class="ansi-blue-fg">None</span>:
+        <span class="ansi-blue-fg">raise</span> <span class="ansi-cyan-fg">Exception</span>(<span class="ansi-yellow-fg">&#39;</span><span class="ansi-yellow-fg">Model has not been loaded properly, no word_dict.</span><span class="ansi-yellow-fg">&#39;</span>)
+    
+    <span class="ansi-white-fg"># TODO: Process input_data so that it is ready to be sent to our model.</span>
+    <span class="ansi-white-fg">#       You should produce two variables:</span>
+    <span class="ansi-white-fg">#         data_X   - A sequence of length 500 which represents the converted review</span>
+    <span class="ansi-white-fg">#         data_len - The length of the review</span>
+
+    data_X = <span class="ansi-blue-fg">None</span>
+    data_len = <span class="ansi-blue-fg">None</span>
+
+    <span class="ansi-white-fg"># Using data_X and data_len we construct an appropriate input tensor. Remember</span>
+    <span class="ansi-white-fg"># that our model expects input data of the form &#39;len, review[500]&#39;.</span>
+    data_pack = np.hstack((data_len, data_X))
+    data_pack = data_pack.reshape(<span class="ansi-blue-fg">1</span>, -<span class="ansi-blue-fg">1</span>)
+    
+    data = torch.from_numpy(data_pack)
+    data = data.to(device)
+
+    <span class="ansi-white-fg"># Make sure to put the model into evaluation mode</span>
+    model.eval()
+
+    <span class="ansi-white-fg"># TODO: Compute the result of applying the model to the input data. The variable `result` should</span>
+    <span class="ansi-white-fg">#       be a numpy array which contains a single integer which is either 1 or 0</span>
+
+    result = <span class="ansi-blue-fg">None</span>
+
+    <span class="ansi-blue-fg">return</span> result
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -15141,7 +15269,7 @@ Billable seconds: 265
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sagemaker.predictor</span> <span class="kn">import</span> <span class="n">RealTimePredictor</span>
@@ -15155,12 +15283,44 @@ Billable seconds: 265
                      <span class="n">role</span> <span class="o">=</span> <span class="n">role</span><span class="p">,</span>
                      <span class="n">framework_version</span><span class="o">=</span><span class="s1">&#39;0.4.0&#39;</span><span class="p">,</span>
                      <span class="n">entry_point</span><span class="o">=</span><span class="s1">&#39;predict.py&#39;</span><span class="p">,</span>
+                     <span class="n">py_version</span><span class="o">=</span><span class="s1">&#39;py3&#39;</span><span class="p">,</span>
                      <span class="n">source_dir</span><span class="o">=</span><span class="s1">&#39;serve&#39;</span><span class="p">,</span>
                      <span class="n">predictor_cls</span><span class="o">=</span><span class="n">StringPredictor</span><span class="p">)</span>
 <span class="n">predictor</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span><span class="n">initial_instance_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">instance_type</span><span class="o">=</span><span class="s1">&#39;ml.m4.xlarge&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>-----------------!</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>The class RealTimePredictor has been renamed in sagemaker&gt;=2.
+See: https://sagemaker.readthedocs.io/en/stable/v2.html for details.
+content_type is a no-op in sagemaker&gt;=2.
+See: https://sagemaker.readthedocs.io/en/stable/v2.html for details.
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -15175,7 +15335,7 @@ Billable seconds: 265
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">glob</span>
@@ -15224,13 +15384,79 @@ Billable seconds: 265
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">ground</span><span class="p">,</span> <span class="n">results</span> <span class="o">=</span> <span class="n">test_reviews</span><span class="p">()</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Starting  pos  files
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ModelError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-54-27d1fd4b7c7b&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>ground<span class="ansi-blue-fg">,</span> results <span class="ansi-blue-fg">=</span> test_reviews<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-53-f3b0feb90653&gt;</span> in <span class="ansi-cyan-fg">test_reviews</span><span class="ansi-blue-fg">(data_dir, stop)</span>
+<span class="ansi-green-intense-fg ansi-bold">     27</span>                 review_input <span class="ansi-blue-fg">=</span> review<span class="ansi-blue-fg">.</span>read<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>encode<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;utf-8&#39;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     28</span>                 <span class="ansi-red-fg"># Send the review to the predictor and store the results</span>
+<span class="ansi-green-fg">---&gt; 29</span><span class="ansi-red-fg">                 </span>results<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>float<span class="ansi-blue-fg">(</span>predictor<span class="ansi-blue-fg">.</span>predict<span class="ansi-blue-fg">(</span>review_input<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     30</span> 
+<span class="ansi-green-intense-fg ansi-bold">     31</span>             <span class="ansi-red-fg"># Sending reviews to our endpoint one at a time takes a while so we</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/sagemaker/predictor.py</span> in <span class="ansi-cyan-fg">predict</span><span class="ansi-blue-fg">(self, data, initial_args, target_model, target_variant, inference_id)</span>
+<span class="ansi-green-intense-fg ansi-bold">    129</span>             data<span class="ansi-blue-fg">,</span> initial_args<span class="ansi-blue-fg">,</span> target_model<span class="ansi-blue-fg">,</span> target_variant<span class="ansi-blue-fg">,</span> inference_id
+<span class="ansi-green-intense-fg ansi-bold">    130</span>         )
+<span class="ansi-green-fg">--&gt; 131</span><span class="ansi-red-fg">         </span>response <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>sagemaker_session<span class="ansi-blue-fg">.</span>sagemaker_runtime_client<span class="ansi-blue-fg">.</span>invoke_endpoint<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">**</span>request_args<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    132</span>         <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_handle_response<span class="ansi-blue-fg">(</span>response<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    133</span> 
+
+<span class="ansi-green-fg">~/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/botocore/client.py</span> in <span class="ansi-cyan-fg">_api_call</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    355</span>                     &#34;%s() only accepts keyword arguments.&#34; % py_operation_name)
+<span class="ansi-green-intense-fg ansi-bold">    356</span>             <span class="ansi-red-fg"># The &#34;self&#34; in this scope is referring to the BaseClient.</span>
+<span class="ansi-green-fg">--&gt; 357</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_make_api_call<span class="ansi-blue-fg">(</span>operation_name<span class="ansi-blue-fg">,</span> kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    358</span> 
+<span class="ansi-green-intense-fg ansi-bold">    359</span>         _api_call<span class="ansi-blue-fg">.</span>__name__ <span class="ansi-blue-fg">=</span> str<span class="ansi-blue-fg">(</span>py_operation_name<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/anaconda3/envs/pytorch_p36/lib/python3.6/site-packages/botocore/client.py</span> in <span class="ansi-cyan-fg">_make_api_call</span><span class="ansi-blue-fg">(self, operation_name, api_params)</span>
+<span class="ansi-green-intense-fg ansi-bold">    674</span>             error_code <span class="ansi-blue-fg">=</span> parsed_response<span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Error&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">{</span><span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Code&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    675</span>             error_class <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>exceptions<span class="ansi-blue-fg">.</span>from_code<span class="ansi-blue-fg">(</span>error_code<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 676</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">raise</span> error_class<span class="ansi-blue-fg">(</span>parsed_response<span class="ansi-blue-fg">,</span> operation_name<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    677</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    678</span>             <span class="ansi-green-fg">return</span> parsed_response
+
+<span class="ansi-red-fg">ModelError</span>: An error occurred (ModelError) when calling the InvokeEndpoint operation: Received server error (500) from model with message &#34;&lt;!DOCTYPE HTML PUBLIC &#34;-//W3C//DTD HTML 3.2 Final//EN&#34;&gt;
+&lt;title&gt;500 Internal Server Error&lt;/title&gt;
+&lt;h1&gt;Internal Server Error&lt;/h1&gt;
+&lt;p&gt;The server encountered an internal error and was unable to complete your request.  Either the server is overloaded or there is an error in the application.&lt;/p&gt;
+&#34;. See https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logEventViewer:group=/aws/sagemaker/Endpoints/sagemaker-pytorch-2021-03-23-12-16-39-716 in account 328961166433 for more information.</pre>
+</div>
+</div>
+
 </div>
 </div>
 
